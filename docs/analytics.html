@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View support metrics, community health analytics, and team performance insights">
+    <title>Analytics - Doorway</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">Doorway</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="discussions.html">Discussions</a></li>
+                    <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                    <li><a href="analytics.html" class="active">Analytics</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="Search..." id="global-search">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>Support Analytics</h1>
+                <p>Track community health, response times, and support trends to improve your help desk performance</p>
+                <div class="page-header-actions">
+                    <button class="btn btn-primary" id="export-data-btn">
+                        <span>📊</span>
+                        Export Data
+                    </button>
+                    <select id="time-range-filter" class="filter-select">
+                        <option value="7d">Last 7 days</option>
+                        <option value="30d" selected>Last 30 days</option>
+                        <option value="90d">Last 90 days</option>
+                        <option value="1y">Last year</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Metrics (reusing metrics section from index) -->
+    <section class="metrics">
+        <div class="container">
+            <h2 class="section-title">Key Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric">
+                    <span class="metric-number" id="total-discussions">--</span>
+                    <span class="metric-label">Total Discussions</span>
+                    <span class="metric-trend" id="discussions-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="response-time">--</span>
+                    <span class="metric-label">Avg Response Time</span>
+                    <span class="metric-trend" id="response-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="resolution-rate">--</span>
+                    <span class="metric-label">Resolution Rate</span>
+                    <span class="metric-trend" id="resolution-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="satisfaction-score">--</span>
+                    <span class="metric-label">Satisfaction Score</span>
+                    <span class="metric-trend" id="satisfaction-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="active-contributors">--</span>
+                    <span class="metric-label">Active Contributors</span>
+                    <span class="metric-trend" id="contributors-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="knowledge-base-views">--</span>
+                    <span class="metric-label">KB Article Views</span>
+                    <span class="metric-trend" id="kb-trend">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="analytics-charts">
+        <div class="container">
+            <div class="charts-grid">
+                <!-- Discussion Volume Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Discussion Volume</h3>
+                        <p>New discussions over time</p>
+                    </div>
+                    <div class="chart-container">
+                        <div id="discussions-chart" class="chart-placeholder">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Loading chart...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Time Trend -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Response Time Trend</h3>
+                        <p>Average first response time</p>
+                    </div>
+                    <div class="chart-container">
+                        <div id="response-chart" class="chart-placeholder">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Loading chart...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Discussion Categories</h3>
+                        <p>Breakdown by category type</p>
+                    </div>
+                    <div class="chart-container">
+                        <div id="categories-chart" class="chart-placeholder">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Loading chart...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resolution Status -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Resolution Status</h3>
+                        <p>Answered vs unanswered discussions</p>
+                    </div>
+                    <div class="chart-container">
+                        <div id="resolution-chart" class="chart-placeholder">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Loading chart...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Performance (reusing discussions list structure) -->
+    <section class="discussions-section">
+        <div class="container">
+            <h2 class="section-title">Team Performance</h2>
+            <div class="discussions-list">
+                <div id="team-performance">
+                    <!-- Loading state -->
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        <p>Loading team performance...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Content (reusing activity card from index) -->
+    <section class="recent">
+        <div class="container">
+            <div class="analytics-content-grid">
+                <div class="content-section">
+                    <h2 class="section-title">Most Active Discussions</h2>
+                    <div class="activity-card">
+                        <div id="top-discussions">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Loading top discussions...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h2 class="section-title">Popular Knowledge Base Articles</h2>
+                    <div class="activity-card">
+                        <div id="top-articles">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Loading top articles...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alerts Section (reusing empty state structure) -->
+    <section class="analytics-alerts">
+        <div class="container">
+            <h2 class="section-title">Alerts & Insights</h2>
+            <div class="alerts-grid">
+                <div class="alert-card hidden" id="slow-response-alert">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <h3>Slow Response Times</h3>
+                        <p>Average response time increased by 25% this week. Consider reviewing team workload.</p>
+                        <button class="btn btn-secondary btn-sm">View Details</button>
+                    </div>
+                </div>
+
+                <div class="alert-card hidden" id="unanswered-questions-alert">
+                    <div class="alert-icon">❓</div>
+                    <div class="alert-content">
+                        <h3>Unanswered Questions</h3>
+                        <p>12 questions from the past week still need responses. Review pending discussions.</p>
+                        <button class="btn btn-secondary btn-sm">Review Questions</button>
+                    </div>
+                </div>
+
+                <div class="alert-card hidden" id="popular-topic-alert">
+                    <div class="alert-icon">📈</div>
+                    <div class="alert-content">
+                        <h3>Trending Topic</h3>
+                        <p>"Authentication setup" is trending. Consider creating a dedicated guide.</p>
+                        <button class="btn btn-secondary btn-sm">Create Guide</button>
+                    </div>
+                </div>
+
+                <div class="alert-card success hidden" id="improvement-alert">
+                    <div class="alert-icon">✅</div>
+                    <div class="alert-content">
+                        <h3>Great Work!</h3>
+                        <p>Resolution rate improved by 15% this month. Keep up the excellent support!</p>
+                        <button class="btn btn-secondary btn-sm">View Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (completely reused) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="discussions.html">Browse Discussions</a></li>
+                        <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <ul>
+                        <li><a href="#" id="github-discussions">GitHub Discussions</a></li>
+                        <li><a href="#" id="github-repo">GitHub Repository</a></li>
+                        <li><a href="#" id="github-wiki">Wiki</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>About Doorway</h3>
+                    <p>Your organization's front door for community support. Built with GitHub Discussions and Wiki for zero-cost, scalable support.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Doorway • Powered by GitHub • Built with ❤️ for the open source community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

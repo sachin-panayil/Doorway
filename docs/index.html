@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Doorway - Your organization's front door for community support, powered by GitHub Discussions and Wiki">
+    <title>Doorway - Support Portal</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">Doorway</div>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="discussions.html">Discussions</a></li>
+                    <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                    <li><a href="analytics.html">Analytics</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="Search discussions and docs..." id="global-search">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Your Support Hub</h1>
+                <p>Get help from the community, browse discussions, and find answers in our comprehensive knowledge base</p>
+                <a href="discussions.html" class="btn btn-primary">Get Started →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="container">
+            <h2 class="section-title">How can we help you today?</h2>
+            <div class="actions-grid">
+                <div class="card">
+                    <span class="card-icon">💬</span>
+                    <h3>Start a Discussion</h3>
+                    <p>Ask questions, share ideas, or get help from our community of experts and fellow users.</p>
+                    <a href="discussions.html?action=create" class="btn btn-primary">Create Discussion</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🔍</span>
+                    <h3>Browse Discussions</h3>
+                    <p>Explore ongoing conversations and see what others are discussing in the community.</p>
+                    <a href="discussions.html" class="btn btn-secondary">View All</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📚</span>
+                    <h3>Knowledge Base</h3>
+                    <p>Find comprehensive guides, tutorials, and documentation to help you get started.</p>
+                    <a href="knowledge-base.html" class="btn btn-secondary">Browse Docs</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics -->
+    <section class="metrics">
+        <div class="container">
+            <h2 class="section-title">Community Health</h2>
+            <div class="metrics-grid">
+                <div class="metric">
+                    <span class="metric-number" id="active-discussions">--</span>
+                    <span class="metric-label">Active Discussions</span>
+                    <span class="metric-trend" id="discussions-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="response-time">--</span>
+                    <span class="metric-label">Avg Response Time</span>
+                    <span class="metric-trend" id="response-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="resolution-rate">--</span>
+                    <span class="metric-label">Resolution Rate</span>
+                    <span class="metric-trend" id="resolution-trend">Loading...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number" id="contributors">--</span>
+                    <span class="metric-label">Contributors</span>
+                    <span class="metric-trend" id="contributors-trend">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="recent">
+        <div class="container">
+            <h2 class="section-title">Recent Discussions</h2>
+            <div class="activity-card">
+                <div id="recent-discussions">
+                    <!-- Loading state -->
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        <p>Loading recent discussions...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="recent-footer">
+                <a href="discussions.html" class="btn btn-secondary">View All Discussions →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="discussions.html">Browse Discussions</a></li>
+                        <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <ul>
+                        <li><a href="#" id="github-discussions">GitHub Discussions</a></li>
+                        <li><a href="#" id="github-repo">GitHub Repository</a></li>
+                        <li><a href="#" id="github-wiki">Wiki</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>About Doorway</h3>
+                    <p>Your organization's front door for community support. Built with GitHub Discussions and Wiki for zero-cost, scalable support.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Doorway • Powered by GitHub • Built with ❤️ for the open source community</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+</html>

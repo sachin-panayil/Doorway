@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse community discussions, ask questions, and get help from fellow users and maintainers">
+    <title>Discussions - Doorway</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">Doorway</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="discussions.html" class="active">Discussions</a></li>
+                    <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                    <li><a href="analytics.html">Analytics</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="Search discussions..." id="global-search">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>Community Discussions</h1>
+                <p>Browse ongoing conversations, ask questions, and share knowledge with the community</p>
+                <button class="btn btn-primary" id="start-discussion-btn">
+                    <span>💬</span>
+                    Start New Discussion
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Selection Modal -->
+    <div id="category-modal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Choose Discussion Category</h2>
+                <button class="modal-close" id="modal-close-btn" aria-label="Close modal">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Select the category that best fits your question or discussion topic:</p>
+                <div class="categories-grid">
+                    <a href="#" class="category-card" data-category="Q_AND_A">
+                        <div class="category-icon">❓</div>
+                        <h3>Q&A</h3>
+                        <p>Ask questions and get help from the community</p>
+                        <div class="category-stats">
+                            <span class="stat-item">124 discussions</span>
+                        </div>
+                    </a>
+                    <a href="#" class="category-card" data-category="GENERAL">
+                        <div class="category-icon">💬</div>
+                        <h3>General Discussion</h3>
+                        <p>General conversations and discussions</p>
+                        <div class="category-stats">
+                            <span class="stat-item">89 discussions</span>
+                        </div>
+                    </a>
+                    <a href="#" class="category-card" data-category="IDEAS">
+                        <div class="category-icon">💡</div>
+                        <h3>Feature Ideas</h3>
+                        <p>Suggest new features and improvements</p>
+                        <div class="category-stats">
+                            <span class="stat-item">56 discussions</span>
+                        </div>
+                    </a>
+                    <a href="#" class="category-card" data-category="SHOW_AND_TELL">
+                        <div class="category-icon">🎉</div>
+                        <h3>Show and Tell</h3>
+                        <p>Share what you've built or accomplished</p>
+                        <div class="category-stats">
+                            <span class="stat-item">31 discussions</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-header">
+                <div class="filters-left">
+                    <h2>Browse Discussions</h2>
+                    <div class="results-info">
+                        <span id="results-count">Loading discussions...</span>
+                    </div>
+                </div>
+                <div class="filters-right">
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="list">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6"></line>
+                                <line x1="8" y1="12" x2="21" y2="12"></line>
+                                <line x1="8" y1="18" x2="21" y2="18"></line>
+                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                            </svg>
+                        </button>
+                        <button class="view-btn" data-view="grid">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-controls">
+                <div class="filter-group">
+                    <label for="category-filter" class="filter-label">Category</label>
+                    <select id="category-filter" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="Q_AND_A">Q&A</option>
+                        <option value="GENERAL">General</option>
+                        <option value="IDEAS">Ideas</option>
+                        <option value="SHOW_AND_TELL">Show and Tell</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter" class="filter-label">Status</label>
+                    <select id="status-filter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="answered">Answered</option>
+                        <option value="unanswered">Needs Answer</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort-filter" class="filter-label">Sort by</label>
+                    <select id="sort-filter" class="filter-select">
+                        <option value="updated">Recently Updated</option>
+                        <option value="created">Recently Created</option>
+                        <option value="upvotes">Most Upvoted</option>
+                        <option value="comments">Most Comments</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-secondary" id="clear-filters">Clear Filters</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discussions List -->
+    <section class="discussions-section">
+        <div class="container">
+            <div id="discussions-container" class="discussions-list view-list">
+                <!-- Loading State -->
+                <div class="loading-state" id="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading discussions...</p>
+                </div>
+
+                <!-- Empty State (hidden by default) -->
+                <div class="empty-state hidden" id="empty-state">
+                    <div class="empty-icon">💬</div>
+                    <h3>No discussions found</h3>
+                    <p>Try adjusting your filters or start a new discussion to get the conversation going.</p>
+                    <button class="btn btn-primary" id="empty-start-discussion">Start First Discussion</button>
+                </div>
+
+                <!-- Discussions will be populated here by JavaScript -->
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more-section hidden" id="load-more-section">
+                <button class="btn btn-secondary" id="load-more-btn">
+                    Load More Discussions
+                </button>
+                <div class="load-more-info">
+                    <span id="showing-count">Showing 1-20</span> of <span id="total-count">156</span> discussions
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="discussions.html">Browse Discussions</a></li>
+                        <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <ul>
+                        <li><a href="#" id="github-discussions">GitHub Discussions</a></li>
+                        <li><a href="#" id="github-repo">GitHub Repository</a></li>
+                        <li><a href="#" id="github-wiki">Wiki</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>About Doorway</h3>
+                    <p>Your organization's front door for community support. Built with GitHub Discussions and Wiki for zero-cost, scalable support.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Doorway • Powered by GitHub • Built with ❤️ for the open source community</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/discussions.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
