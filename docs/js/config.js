@@ -1,6 +1,6 @@
 window.DOORWAY_CONFIG = {
   repository: {
-    owner: 'sachin-panayil',
+    owner: 'Doorway-Test',
     name: 'Doorway'
   }
 };

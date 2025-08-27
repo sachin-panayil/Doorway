@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initializeElements();
   setupEventListeners();
   await loadDiscussions();
+  handleSearchFromURL();
 });
 
 function initializeElements() {
@@ -74,7 +75,7 @@ async function loadDiscussions() {
     
     // Try to fetch the static JSON data
     try {
-      const response = await fetch('/data/discussions.json');
+      const response = await fetch('data/discussions.json');
       if (!response.ok) throw new Error('Failed to load discussions data');
       discussionsData = await response.json();
     } catch (fetchError) {
@@ -280,6 +281,28 @@ function getRepoPath() {
   
   console.warn('Could not detect repository. Please configure in config.js');
   return 'your-org/your-repo';
+}
+
+function handleSearchFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('search');
+  const action = urlParams.get('action');
+  
+  if (searchQuery) {
+    const searchInput = document.getElementById('global-search');
+    if (searchInput) {
+      searchInput.value = searchQuery;
+      setTimeout(() => {
+        applyFilters();
+      }, 500);
+    }
+  }
+  
+  if (action === 'create') {
+    setTimeout(() => {
+      showCategoryModal();
+    }, 500);
+  }
 }
 
 function showError(message) {

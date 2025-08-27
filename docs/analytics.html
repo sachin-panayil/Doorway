@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="View support metrics, community health analytics, and team performance insights">
+    <meta name="description" content="View support metrics, community health analytics, and organization performance insights">
     <title>Analytics - Doorway</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -36,18 +36,11 @@
                         <span>📊</span>
                         Export Data
                     </button>
-                    <select id="time-range-filter" class="filter-select">
-                        <option value="7d">Last 7 days</option>
-                        <option value="30d" selected>Last 30 days</option>
-                        <option value="90d">Last 90 days</option>
-                        <option value="1y">Last year</option>
-                    </select>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Key Metrics (reusing metrics section from index) -->
+    <!-- Key Metrics -->
     <section class="metrics">
         <div class="container">
             <h2 class="section-title">Key Performance Metrics</h2>
@@ -76,11 +69,6 @@
                     <span class="metric-number" id="active-contributors">--</span>
                     <span class="metric-label">Active Contributors</span>
                     <span class="metric-trend" id="contributors-trend">Loading...</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-number" id="knowledge-base-views">--</span>
-                    <span class="metric-label">KB Article Views</span>
-                    <span class="metric-trend" id="kb-trend">Loading...</span>
                 </div>
             </div>
         </div>
@@ -157,23 +145,21 @@
         </div>
     </section>
 
-    <!-- Team Performance (reusing discussions list structure) -->
+    <!-- Organization Analytics -->
     <section class="discussions-section">
         <div class="container">
-            <h2 class="section-title">Team Performance</h2>
-            <div class="discussions-list">
-                <div id="team-performance">
-                    <!-- Loading state -->
-                    <div class="loading-state">
-                        <div class="loading-spinner"></div>
-                        <p>Loading team performance...</p>
-                    </div>
+            <h2 class="section-title">Organization Analytics</h2>
+            <div id="team-performance">
+                <!-- Loading state -->
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading organization analytics...</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Top Content (reusing activity card from index) -->
+    <!-- Top Content -->
     <section class="recent">
         <div class="container">
             <div class="analytics-content-grid">
@@ -188,67 +174,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="content-section">
-                    <h2 class="section-title">Popular Knowledge Base Articles</h2>
-                    <div class="activity-card">
-                        <div id="top-articles">
-                            <div class="loading-state">
-                                <div class="loading-spinner"></div>
-                                <p>Loading top articles...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Alerts Section (reusing empty state structure) -->
-    <section class="analytics-alerts">
-        <div class="container">
-            <h2 class="section-title">Alerts & Insights</h2>
-            <div class="alerts-grid">
-                <div class="alert-card hidden" id="slow-response-alert">
-                    <div class="alert-icon">⚠️</div>
-                    <div class="alert-content">
-                        <h3>Slow Response Times</h3>
-                        <p>Average response time increased by 25% this week. Consider reviewing team workload.</p>
-                        <button class="btn btn-secondary btn-sm">View Details</button>
-                    </div>
-                </div>
-
-                <div class="alert-card hidden" id="unanswered-questions-alert">
-                    <div class="alert-icon">❓</div>
-                    <div class="alert-content">
-                        <h3>Unanswered Questions</h3>
-                        <p>12 questions from the past week still need responses. Review pending discussions.</p>
-                        <button class="btn btn-secondary btn-sm">Review Questions</button>
-                    </div>
-                </div>
-
-                <div class="alert-card hidden" id="popular-topic-alert">
-                    <div class="alert-icon">📈</div>
-                    <div class="alert-content">
-                        <h3>Trending Topic</h3>
-                        <p>"Authentication setup" is trending. Consider creating a dedicated guide.</p>
-                        <button class="btn btn-secondary btn-sm">Create Guide</button>
-                    </div>
-                </div>
-
-                <div class="alert-card success hidden" id="improvement-alert">
-                    <div class="alert-icon">✅</div>
-                    <div class="alert-content">
-                        <h3>Great Work!</h3>
-                        <p>Resolution rate improved by 15% this month. Keep up the excellent support!</p>
-                        <button class="btn btn-secondary btn-sm">View Report</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer (completely reused) -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -256,7 +186,6 @@
                     <h3>Support</h3>
                     <ul>
                         <li><a href="discussions.html">Browse Discussions</a></li>
-                        <li><a href="knowledge-base.html">Knowledge Base</a></li>
                         <li><a href="analytics.html">Analytics</a></li>
                     </ul>
                 </div>
@@ -279,6 +208,6 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/analytics.js"></script>
 </body>
 </html>
