@@ -6,6 +6,7 @@
     <meta name="description" content="Browse community discussions, ask questions, and get help from fellow users and maintainers">
     <title>Discussions - Doorway</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/config.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -16,7 +17,6 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="discussions.html" class="active">Discussions</a></li>
-                    <li><a href="knowledge-base.html">Knowledge Base</a></li>
                     <li><a href="analytics.html">Analytics</a></li>
                 </ul>
                 <div class="search-box">
@@ -60,33 +60,21 @@
                         <div class="category-icon">❓</div>
                         <h3>Q&A</h3>
                         <p>Ask questions and get help from the community</p>
-                        <div class="category-stats">
-                            <span class="stat-item">124 discussions</span>
-                        </div>
                     </a>
                     <a href="#" class="category-card" data-category="GENERAL">
                         <div class="category-icon">💬</div>
                         <h3>General Discussion</h3>
                         <p>General conversations and discussions</p>
-                        <div class="category-stats">
-                            <span class="stat-item">89 discussions</span>
-                        </div>
                     </a>
                     <a href="#" class="category-card" data-category="IDEAS">
                         <div class="category-icon">💡</div>
                         <h3>Feature Ideas</h3>
                         <p>Suggest new features and improvements</p>
-                        <div class="category-stats">
-                            <span class="stat-item">56 discussions</span>
-                        </div>
                     </a>
                     <a href="#" class="category-card" data-category="SHOW_AND_TELL">
                         <div class="category-icon">🎉</div>
                         <h3>Show and Tell</h3>
                         <p>Share what you've built or accomplished</p>
-                        <div class="category-stats">
-                            <span class="stat-item">31 discussions</span>
-                        </div>
                     </a>
                 </div>
             </div>
@@ -103,28 +91,6 @@
                         <span id="results-count">Loading discussions...</span>
                     </div>
                 </div>
-                <div class="filters-right">
-                    <div class="view-toggle">
-                        <button class="view-btn active" data-view="list">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="8" y1="6" x2="21" y2="6"></line>
-                                <line x1="8" y1="12" x2="21" y2="12"></line>
-                                <line x1="8" y1="18" x2="21" y2="18"></line>
-                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                            </svg>
-                        </button>
-                        <button class="view-btn" data-view="grid">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="14" width="7" height="7"></rect>
-                                <rect x="3" y="14" width="7" height="7"></rect>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
             </div>
 
             <div class="filters-controls">
@@ -132,7 +98,7 @@
                     <label for="category-filter" class="filter-label">Category</label>
                     <select id="category-filter" class="filter-select">
                         <option value="">All Categories</option>
-                        <option value="Q_AND_A">Q&A</option>
+                        <option value="Q&A">Q&A</option>
                         <option value="GENERAL">General</option>
                         <option value="IDEAS">Ideas</option>
                         <option value="SHOW_AND_TELL">Show and Tell</option>
@@ -228,6 +194,5 @@
 
     <!-- Scripts -->
     <script src="js/discussions.js"></script>
-    <script src="js/main.js"></script>
 </body>
 </html>

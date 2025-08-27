@@ -1,0 +1,36 @@
+{
+  "name": "doorway",
+  "version": "1.0.0",
+  "description": "A zero-cost help desk solution that transforms GitHub Discussions and Wiki into a professional support portal for open source organizations.",
+  "main": "docs/index.html",
+  "scripts": {
+    "start": "python -m http.server 8000 --directory docs",
+    "setup": "node setup.js",
+    "test": "echo 'No tests yet!"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/doorway.git"
+  },
+  "keywords": [
+    "help-desk",
+    "support-portal",
+    "github-discussions",
+    "github-wiki",
+    "open-source",
+    "community-support",
+    "documentation"
+  ],
+  "author": "Your Organization",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-org/doorway/issues"
+  },
+  "homepage": "https://github.com/your-org/doorway#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
