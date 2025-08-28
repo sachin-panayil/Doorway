@@ -16,11 +16,13 @@ jobs:
           fetch-depth: 0  
 
       - name: Setup Node.js
-      - name: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
             node-version: 18
 
       - name: Run setup script
-        uses: node setup.js
+        run: node setup.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}

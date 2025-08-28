@@ -1,14 +1,56 @@
 /**
- * Analytics page JavaScript - loads and displays analytics data
+ * Enhanced analytics.js with personal/organization account support
  */
 
 let analyticsData = null;
+let isPersonalAccount = false;
+let ownerInfo = null;
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
+  checkAccountType();
+  adaptUIForAccountType();
   await loadAnalytics();
   setupEventListeners();
 });
+
+function checkAccountType() {
+  // Check if we have config data about the account type
+  if (window.DOORWAY_CONFIG && window.DOORWAY_CONFIG.owner) {
+    isPersonalAccount = window.DOORWAY_CONFIG.owner.isPersonal;
+    ownerInfo = window.DOORWAY_CONFIG.owner;
+    console.log(`Account type from config: ${isPersonalAccount ? 'Personal' : 'Organization'}`);
+  } else {
+    // Fallback: try to detect from hostname or default to personal
+    const hostname = window.location.hostname;
+    if (hostname.endsWith('.github.io')) {
+      // GitHub Pages personal sites are usually personal accounts
+      isPersonalAccount = true;
+      console.log('Detected personal account from GitHub Pages URL');
+    } else {
+      isPersonalAccount = true; // Default to personal
+      console.log('Defaulting to personal account');
+    }
+  }
+}
+
+function adaptUIForAccountType() {
+  // Update page title and headers based on account type
+  const pageTitle = document.querySelector('.page-header h1');
+  const sectionTitle = document.querySelector('#team-performance');
+  
+  if (pageTitle) {
+    pageTitle.textContent = isPersonalAccount ? 'Repository Analytics' : 'Organization Analytics';
+  }
+  
+  // Update analytics section title
+  const analyticsSection = document.querySelector('.discussions-section h2');
+  if (analyticsSection && analyticsSection.textContent.includes('Organization')) {
+    analyticsSection.textContent = isPersonalAccount 
+      ? 'Repository Analytics' 
+      : 'Organization Analytics';
+  }
+}
 
 function setupEventListeners() {
   // Time range filter (if you want to add filtering later)
@@ -34,13 +76,20 @@ async function loadAnalytics() {
     }
     
     analyticsData = await response.json();
-    console.log('Analytics data loaded:', analyticsData); // Debug log
+    
+    // Update account type info from analytics data if available
+    if (analyticsData.ownerInfo) {
+      isPersonalAccount = analyticsData.ownerInfo.isPersonal;
+      ownerInfo = analyticsData.ownerInfo;
+    }
+    
+    console.log('Analytics data loaded:', analyticsData);
     displayAnalytics();
     
   } catch (error) {
     console.error('Error loading analytics:', error);
     showError('Failed to load analytics data. Please try again later.');
-    hideLoadingStates(); // Make sure to hide loading states on error
+    hideLoadingStates();
   }
 }
 
@@ -50,10 +99,10 @@ function displayAnalytics() {
     return;
   }
   
-  console.log('Displaying analytics data...'); // Debug log
+  console.log('Displaying analytics data...');
   displayMetrics();
   displayCharts();
-  displayOrganizationAnalytics();
+  displayOwnerAnalytics(); // Renamed from displayOrganizationAnalytics
   displayMostActiveDiscussions();
   hideLoadingStates();
 }
@@ -76,7 +125,7 @@ function updateMetricCard(id, value, trend) {
   
   if (numberEl) {
     numberEl.textContent = value;
-    console.log(`Updated ${id} to ${value}`); // Debug log
+    console.log(`Updated ${id} to ${value}`);
   }
   if (trendEl && trend) {
     const trendText = trend.change > 0 ? `↑ ${trend.change} this month` : 
@@ -184,7 +233,6 @@ function displayResponseTimeChart() {
   const container = document.getElementById('response-chart');
   if (!container) return;
   
-  // Simple placeholder for response time trend
   const chartHTML = `
     <div class="response-time-chart">
       <div class="metric-large">
@@ -200,33 +248,43 @@ function displayResponseTimeChart() {
   container.innerHTML = chartHTML;
 }
 
-function displayOrganizationAnalytics() {
+function displayOwnerAnalytics() {
   const container = document.getElementById('team-performance');
   if (!container) return;
   
-  const org = analyticsData.organization;
+  const owner = analyticsData.owner;
   const contributors = analyticsData.contributors || [];
   
-  if (!org) {
-    container.innerHTML = '<p>Organization data not available</p>';
+  if (!owner) {
+    container.innerHTML = `<p>${isPersonalAccount ? 'Repository' : 'Organization'} data not available</p>`;
     return;
   }
   
   // Clear any inherited classes and set proper structure
-  container.className = 'org-analytics-container';
+  container.className = 'owner-analytics-container';
   
-  const orgHTML = `
-    <div class="org-overview">
-      <div class="org-header">
-        <h3>${org.name || 'Organization'} Analytics</h3>
-        <div class="org-stats">
-          <span class="org-stat">👥 ${org.totalMembers} members</span>
-          <span class="org-stat">📁 ${org.totalRepositories} repositories</span>
+  // Adaptive content based on account type
+  const isOrg = owner.type === 'Organization';
+  const title = isOrg ? `${owner.name} Analytics` : `${owner.name}'s Repository Analytics`;
+  const memberText = isOrg 
+    ? `👥 ${owner.totalMembers} members` 
+    : `👤 Personal Account`;
+  const contributorTitle = isOrg ? 'Top Organization Contributors' : 'Top Repository Contributors';
+  const repoTitle = isOrg ? 'Most Popular Organization Repositories' : 'Most Popular Repositories';
+  
+  const ownerHTML = `
+    <div class="owner-overview">
+      <div class="owner-header">
+        <h3>${title}</h3>
+        <div class="owner-stats">
+          <span class="owner-stat">${memberText}</span>
+          <span class="owner-stat">📁 ${owner.totalRepositories} repositories</span>
+          ${isOrg ? `<span class="owner-stat">🏢 Organization</span>` : `<span class="owner-stat">👤 Personal</span>`}
         </div>
       </div>
       
       <div class="contributors-section">
-        <h4>Top Contributors</h4>
+        <h4>${contributorTitle}</h4>
         <div class="contributors-list">
           ${contributors.slice(0, 10).map(contributor => `
             <div class="contributor-item">
@@ -242,11 +300,11 @@ function displayOrganizationAnalytics() {
         </div>
       </div>
       
-      ${org.topRepositories ? `
+      ${owner.topRepositories && owner.topRepositories.length > 0 ? `
         <div class="top-repos-section">
-          <h4>Most Popular Repositories</h4>
+          <h4>${repoTitle}</h4>
           <div class="repos-list">
-            ${org.topRepositories.slice(0, 5).map(repo => `
+            ${owner.topRepositories.slice(0, 5).map(repo => `
               <div class="repo-item">
                 <div class="repo-info">
                   <div class="repo-name">${repo.name}</div>
@@ -263,7 +321,7 @@ function displayOrganizationAnalytics() {
     </div>
   `;
   
-  container.innerHTML = orgHTML;
+  container.innerHTML = ownerHTML;
 }
 
 function displayMostActiveDiscussions() {
@@ -293,19 +351,16 @@ function displayMostActiveDiscussions() {
 }
 
 function showLoadingStates() {
-  // Show loading spinners for all sections
   const loadingElements = document.querySelectorAll('.loading-state');
   loadingElements.forEach(el => el.classList.remove('hidden'));
 }
 
 function hideLoadingStates() {
-  // Hide loading spinners
   const loadingElements = document.querySelectorAll('.loading-state');
   loadingElements.forEach(el => el.classList.add('hidden'));
 }
 
 function showError(message) {
-  // Show error message in main container
   const container = document.querySelector('.analytics-charts');
   if (container) {
     container.innerHTML = `
@@ -319,20 +374,31 @@ function showError(message) {
 }
 
 function applyTimeFilter(event) {
-  // Placeholder for time filtering - could implement later
   console.log('Time filter changed:', event.target.value);
+  // Could implement time filtering here if needed
 }
 
 function exportData() {
   if (!analyticsData) return;
   
-  const dataStr = JSON.stringify(analyticsData, null, 2);
+  // Include account type information in export
+  const exportData = {
+    ...analyticsData,
+    exportInfo: {
+      exportedAt: new Date().toISOString(),
+      accountType: isPersonalAccount ? 'Personal' : 'Organization',
+      ownerInfo: ownerInfo
+    }
+  };
+  
+  const dataStr = JSON.stringify(exportData, null, 2);
   const dataBlob = new Blob([dataStr], { type: 'application/json' });
   const url = URL.createObjectURL(dataBlob);
   
   const link = document.createElement('a');
   link.href = url;
-  link.download = `doorway-analytics-${new Date().toISOString().split('T')[0]}.json`;
+  const accountType = isPersonalAccount ? 'personal' : 'org';
+  link.download = `doorway-analytics-${accountType}-${new Date().toISOString().split('T')[0]}.json`;
   link.click();
   
   URL.revokeObjectURL(url);

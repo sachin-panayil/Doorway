@@ -5,7 +5,7 @@ const path = require('path');
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = process.env.REPO_OWNER; // process.env.GITHUB_REPOSITORY_OWNER || 'your-org';
 const REPO_NAME = process.env.REPO_NAME; // process.env.GITHUB_REPOSITORY?.split('/')[1] || 'your-repo';
-const OUTPUT_FILE = '/data/discussions.json';
+const OUTPUT_FILE = 'docs/data/discussions.json';
 
 // GraphQL query to fetch discussions
 const DISCUSSIONS_QUERY = `

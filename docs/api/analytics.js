@@ -7,7 +7,9 @@ const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;
 const OUTPUT_FILE = 'docs/data/analytics.json';
 
-// GraphQL query for discussions with comments
+let ownerType = null; // Will be determined dynamically
+
+// Enhanced GraphQL query that works for both personal and org accounts
 const DISCUSSIONS_QUERY = `
   query GetDiscussions($owner: String!, $repo: String!, $first: Int!) {
     repository(owner: $owner, name: $repo) {
@@ -45,6 +47,8 @@ const DISCUSSIONS_QUERY = `
         }
       }
     }
+    
+    # Try organization query (will be null for personal accounts)
     organization(login: $owner) {
       id
       name
@@ -52,6 +56,23 @@ const DISCUSSIONS_QUERY = `
       membersWithRole {
         totalCount
       }
+      repositories(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
+        totalCount
+        nodes {
+          name
+          stargazerCount
+          forkCount
+          pushedAt
+        }
+      }
+    }
+    
+    # Try user query (will be null for organizations) 
+    user(login: $owner) {
+      id
+      name
+      login
+      createdAt
       repositories(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
         totalCount
         nodes {
@@ -82,7 +103,8 @@ async function fetchFromGitHub(query, variables) {
 
     const data = await response.json();
     if (data.errors) {
-      throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
+      console.warn('GraphQL errors (may be expected):', JSON.stringify(data.errors));
+      // Don't throw for GraphQL errors - organization query fails for users
     }
 
     return data.data;
@@ -110,6 +132,64 @@ async function fetchContributorStats() {
     console.error('Error fetching contributors:', error);
     return [];
   }
+}
+
+function determineOwnerType(githubData) {
+  if (githubData.organization) {
+    ownerType = 'Organization';
+    return 'Organization';
+  } else if (githubData.user) {
+    ownerType = 'User';
+    return 'User';
+  } else {
+    console.warn('Could not determine owner type, defaulting to User');
+    ownerType = 'User';
+    return 'User';
+  }
+}
+
+function processOwnerData(githubData) {
+  const orgData = githubData.organization;
+  const userData = githubData.user;
+  
+  if (orgData) {
+    return {
+      type: 'Organization',
+      name: orgData.name || REPO_OWNER,
+      login: REPO_OWNER,
+      totalMembers: orgData.membersWithRole.totalCount,
+      totalRepositories: orgData.repositories.totalCount,
+      createdAt: orgData.createdAt,
+      topRepositories: orgData.repositories.nodes
+        .sort((a, b) => b.stargazerCount - a.stargazerCount)
+        .slice(0, 10)
+        .map(repo => ({
+          name: repo.name,
+          stars: repo.stargazerCount,
+          forks: repo.forkCount,
+          lastUpdate: repo.pushedAt
+        }))
+    };
+  } else if (userData) {
+    return {
+      type: 'User',
+      name: userData.name || userData.login,
+      login: userData.login,
+      totalRepositories: userData.repositories.totalCount,
+      createdAt: userData.createdAt,
+      topRepositories: userData.repositories.nodes
+        .sort((a, b) => b.stargazerCount - a.stargazerCount)
+        .slice(0, 10)
+        .map(repo => ({
+          name: repo.name,
+          stars: repo.stargazerCount,
+          forks: repo.forkCount,
+          lastUpdate: repo.pushedAt
+        }))
+    };
+  }
+  
+  return null;
 }
 
 function calculateMetrics(discussions) {
@@ -194,26 +274,6 @@ function calculateMetrics(discussions) {
   };
 }
 
-function processOrganizationData(orgData) {
-  if (!orgData) return null;
-  
-  return {
-    name: orgData.name,
-    totalMembers: orgData.membersWithRole.totalCount,
-    totalRepositories: orgData.repositories.totalCount,
-    createdAt: orgData.createdAt,
-    topRepositories: orgData.repositories.nodes
-      .sort((a, b) => b.stargazerCount - a.stargazerCount)
-      .slice(0, 10)
-      .map(repo => ({
-        name: repo.name,
-        stars: repo.stargazerCount,
-        forks: repo.forkCount,
-        lastUpdate: repo.pushedAt
-      }))
-  };
-}
-
 function processContributors(contributors) {
   return contributors
     .slice(0, 20)
@@ -226,7 +286,6 @@ function processContributors(contributors) {
 
 function generateSatisfactionScore() {
   // Simple calculation based on resolution rate and response time
-  // In a real implementation, this could come from surveys or user feedback
   const baseScore = 4.2; // out of 5
   return baseScore;
 }
@@ -235,12 +294,16 @@ async function generateAnalytics() {
   console.log('Generating analytics data...');
   
   try {
-    // Fetch discussions and org data
+    // Fetch discussions and owner data
     const githubData = await fetchFromGitHub(DISCUSSIONS_QUERY, {
       owner: REPO_OWNER,
       repo: REPO_NAME,
       first: 100
     });
+
+    // Determine owner type
+    const detectedOwnerType = determineOwnerType(githubData);
+    console.log(`Detected owner type: ${detectedOwnerType}`);
 
     // Fetch contributors
     const contributors = await fetchContributorStats();
@@ -249,15 +312,22 @@ async function generateAnalytics() {
     const discussions = githubData.repository.discussions.nodes;
     const metrics = calculateMetrics(discussions);
 
-    // Process organization data
-    const orgAnalytics = processOrganizationData(githubData.organization);
+    // Process owner data
+    const ownerAnalytics = processOwnerData(githubData);
     
     // Process contributors
     const contributorStats = processContributors(contributors);
 
-    // Generate complete analytics
+    // Generate complete analytics with owner type awareness
     const analytics = {
       lastUpdated: new Date().toISOString(),
+      ownerType: detectedOwnerType,
+      ownerInfo: {
+        type: detectedOwnerType,
+        name: ownerAnalytics?.name || REPO_OWNER,
+        login: REPO_OWNER,
+        isPersonal: detectedOwnerType === 'User'
+      },
       metrics: {
         totalDiscussions: metrics.totalDiscussions,
         avgResponseTime: `${metrics.avgResponseTime}h`,
@@ -273,7 +343,7 @@ async function generateAnalytics() {
         },
         responseTime: {
           current: metrics.avgResponseTime,
-          trend: '', // Could calculate trend if we had historical data
+          trend: '',
           change: 0
         },
         resolution: {
@@ -293,7 +363,7 @@ async function generateAnalytics() {
           unanswered: discussions.filter(d => !d.isAnswered).length
         }
       },
-      organization: orgAnalytics,
+      owner: ownerAnalytics,
       contributors: contributorStats,
       mostActiveDiscussions: metrics.mostActive.map(d => ({
         title: d.title,
@@ -314,7 +384,7 @@ async function generateAnalytics() {
     // Write analytics file
     fs.writeFileSync(OUTPUT_FILE, JSON.stringify(analytics, null, 2));
     
-    console.log(`✅ Analytics generated successfully`);
+    console.log(`✅ Analytics generated successfully for ${detectedOwnerType.toLowerCase()}`);
     
   } catch (error) {
     console.error('❌ Failed to generate analytics:', error);

@@ -23,11 +23,11 @@ jobs:
             node-version: 18
 
       - name: Run update script
-        uses: node docs/api/main.js
+        run: node docs/api/main.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: Doorway-Test
-          REPO_NAME: Doorway
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
