@@ -1,7 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-// GitHub API configuration
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;
