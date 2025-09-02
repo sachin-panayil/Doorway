@@ -1,4 +1,4 @@
-name: Setup Doorway Support Portal
+name: Inital Doorway Setup
 on:
   workflow_dispatch:
 
@@ -30,7 +30,7 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update data [skip ci]"
+          commit_message: "Initial setup"
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
           branch: ${{ github.ref_name }}

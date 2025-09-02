@@ -50,13 +50,10 @@ To democratize professional support experiences for open source projects by leve
    - Paste your Personal Access Token as the value
 
 4. **Setup runs automatically**: The setup workflow triggers on repository creation and handles:
-   - Account type detection (personal vs organization)
-   - GitHub Discussions and Pages enablement
-   - Discussion category creation
-   - Analytics configuration
-   - Welcome discussion creation
 
-5. **Access your help desk**: Visit `https://your-username.github.io/repository-name` (available after ~5-10 minutes)
+5. **Access your help desk**: Visit `https://your-username.github.io/repository-name`
+
+6. **Optional**: Add your Github Pages Link to About Section
 
 ### Configuration
 

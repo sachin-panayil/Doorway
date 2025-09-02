@@ -1,8 +1,3 @@
-/**
- * Client-side JavaScript to load and display discussions from static JSON
- */
-
-// State management
 let discussionsData = null;
 let filteredDiscussions = [];
 let currentView = 'grid'; // Default to grid view

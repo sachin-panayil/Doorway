@@ -1,7 +1,3 @@
-/**
- * Enhanced analytics.js with personal/organization account support
- */
-
 let analyticsData = null;
 let isPersonalAccount = false;
 let ownerInfo = null;
@@ -252,23 +248,39 @@ function displayOwnerAnalytics() {
   const container = document.getElementById('team-performance');
   if (!container) return;
   
-  const owner = analyticsData.owner;
-  const contributors = analyticsData.contributors || [];
-  
-  if (!owner) {
-    container.innerHTML = `<p>${isPersonalAccount ? 'Repository' : 'Organization'} data not available</p>`;
+  const owner = analyticsData?.owner || analyticsData?.ownerInfo;
+  const contributors = analyticsData?.contributors || [];
+
+  if (!owner && !contributors.length) {
+    container.innerHTML = `
+      <div class="owner-analytics-container">
+        <div class="owner-overview">
+          <div class="owner-header">
+            <h3>${isPersonalAccount ? 'Repository' : 'Organization'} Analytics</h3>
+            <div class="owner-stats">
+              <span class="owner-stat">📊 Analytics available</span>
+            </div>
+          </div>
+          <div class="contributors-section">
+            <h4>Contributors</h4>
+            <p style="color: var(--text-secondary); text-align: center; padding: var(--space-xl);">
+              Contributor data will appear here when available.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
     return;
   }
-  
-  // Clear any inherited classes and set proper structure
+
   container.className = 'owner-analytics-container';
-  
-  // Adaptive content based on account type
-  const isOrg = owner.type === 'Organization';
-  const title = isOrg ? `${owner.name} Analytics` : `${owner.name}'s Repository Analytics`;
-  const memberText = isOrg 
+
+  const isOrg = owner?.type === 'Organization';
+  const ownerName = owner?.name || owner?.login || (window.DOORWAY_CONFIG?.repository?.owner) || 'Repository';
+  const title = isOrg ? `${ownerName} Analytics` : `${ownerName}'s Repository Analytics`;
+  const memberText = isOrg && owner?.totalMembers
     ? `👥 ${owner.totalMembers} members` 
-    : `👤 Personal Account`;
+    : `👤 ${isPersonalAccount ? 'Personal Account' : 'Account'}`;
   const contributorTitle = isOrg ? 'Top Organization Contributors' : 'Top Repository Contributors';
   const repoTitle = isOrg ? 'Most Popular Organization Repositories' : 'Most Popular Repositories';
   
@@ -278,15 +290,15 @@ function displayOwnerAnalytics() {
         <h3>${title}</h3>
         <div class="owner-stats">
           <span class="owner-stat">${memberText}</span>
-          <span class="owner-stat">📁 ${owner.totalRepositories} repositories</span>
-          ${isOrg ? `<span class="owner-stat">🏢 Organization</span>` : `<span class="owner-stat">👤 Personal</span>`}
+          ${owner?.totalRepositories ? `<span class="owner-stat">📁 ${owner.totalRepositories} repositories</span>` : ''}
+          <span class="owner-stat">${isOrg ? '🏢 Organization' : '👤 Personal'}</span>
         </div>
       </div>
       
       <div class="contributors-section">
         <h4>${contributorTitle}</h4>
         <div class="contributors-list">
-          ${contributors.slice(0, 10).map(contributor => `
+          ${contributors.length > 0 ? contributors.slice(0, 10).map(contributor => `
             <div class="contributor-item">
               <div class="contributor-info">
                 <img src="${contributor.avatar}" alt="${contributor.login}" class="contributor-avatar">
@@ -296,11 +308,15 @@ function displayOwnerAnalytics() {
                 </div>
               </div>
             </div>
-          `).join('')}
+          `).join('') : `
+            <div style="text-align: center; padding: var(--space-xl); color: var(--text-secondary);">
+              <p>No contributor data available yet.</p>
+            </div>
+          `}
         </div>
       </div>
       
-      ${owner.topRepositories && owner.topRepositories.length > 0 ? `
+      ${owner?.topRepositories && owner.topRepositories.length > 0 ? `
         <div class="top-repos-section">
           <h4>${repoTitle}</h4>
           <div class="repos-list">

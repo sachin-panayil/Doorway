@@ -1,4 +1,4 @@
-name: Update data for Tickets and Analytics
+name: Update Data 
 on:
   schedule:
     - cron: "0 * * * *" 
@@ -32,7 +32,7 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update data [skip ci]"
+          commit_message: "Update data"
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
           branch: ${{ github.ref_name }}

@@ -1,7 +1,3 @@
-/**
- * Main JavaScript for homepage - loads preview data from analytics
- */
-
 let analyticsData = null;
 let discussionsData = null;
 
