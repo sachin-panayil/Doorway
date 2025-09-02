@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
+const { execSync } = require('child_process');
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = process.env.REPO_OWNER;
@@ -449,31 +450,53 @@ ${ownerType === 'Organization' ?
   }
 }
 
+async function refreshDataSources() {
+  console.log('🔄 Refreshing data sources with latest discussions...');
+  
+  try {
+    execSync('node docs/api/main.js', { 
+      stdio: 'inherit',
+      env: { 
+        ...process.env,
+        GITHUB_TOKEN,
+        REPO_OWNER,
+        REPO_NAME
+      }
+    });
+    console.log('✅ Data sources updated successfully');
+  } catch (error) {
+    console.log('⚠️  Could not refresh data sources:', error.message);
+  }
+}
+
 async function main() {
   console.log('🚀 Starting Doorway Help Desk Setup!');
   console.log('');
 
   try {
     await detectOwnerType();
-    console.log('');
+    console.log('\n');
     
     await enableDiscussions();
-    console.log('');
+    console.log('\n');
     
     await enableGitHubPages();
-    console.log('');
+    console.log('\n');
     
     await updateConfigFile();
-    console.log('');
+    console.log('\n');
     
     await createInitialAnalyticsData();
-    console.log('');
+    console.log('\n');
     
     await fetchDiscussionsData();
-    console.log('');
+    console.log('\n');
     
     await createWelcomeDiscussion();
-    console.log('');
+    console.log('\n');
+
+    await refreshDataSources();
+    console.log('\n');
     
   } catch (error) {
     console.error('❌ Setup failed:', error.message);
