@@ -451,21 +451,22 @@ ${ownerType === 'Organization' ?
 }
 
 async function refreshDataSources() {
-  console.log('🔄 Refreshing data sources with latest discussions...');
+  console.log('🔄 Triggering GitHub Action to refresh data sources...');
   
   try {
-    execSync('node docs/api/main.js', { 
-      stdio: 'inherit',
-      env: { 
-        ...process.env,
-        GITHUB_TOKEN,
-        REPO_OWNER,
-        REPO_NAME
-      }
+    const repoInfo = await makeGitHubRequest(`/repos/${REPO_OWNER}/${REPO_NAME}`);
+    const defaultBranch = repoInfo.default_branch || 'main';
+    
+    await makeGitHubRequest(`/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/update-data.yml/dispatches`, 'POST', {
+      ref: defaultBranch
     });
-    console.log('✅ Data sources updated successfully');
+    
+    console.log('✅ GitHub Action triggered successfully');
+    console.log('⏳ Data sources will be updated in a few moments...');
+    console.log('💡 You can monitor progress at: https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/actions');
+    
   } catch (error) {
-    console.log('⚠️  Could not refresh data sources:', error.message);
+    console.log('⚠️  Could not trigger GitHub Action:', error.message);
   }
 }
 
