@@ -1,43 +1,27 @@
-# Project Context
-
-This document provides background on Doorway's development journey and the design decisions that shaped the final implementation.
-
 ## Project Origins
 
-Doorway started from observing that open source projects often need community support infrastructure, but traditional help desk solutions either cost money or require significant technical setup. The goal was to create a free alternative that leverages GitHub's existing community features while providing a more polished, user-friendly interface.
+Doorway started with a pretty simple observation: a lot of open source projects need some kind of community support system, but the usual help desk tools are either expensive or way too technical to set up. I wanted something lightweight, free, and built around GitHub’s existing community features — but with a smoother, more approachable interface.
 
-The initial concept explored several approaches - from a full GitHub Marketplace app to repository templates with manual setup. We ultimately chose a hybrid approach using repository templates with GitHub Actions automation, which provides meaningful setup automation while keeping users in full control of their code and avoiding complex marketplace approval processes.
-
-## Technical Approach
-
-The final architecture combines static site generation with GitHub's APIs to create a responsive help desk interface. Users fork a template repository and run a GitHub Actions workflow that automatically enables discussions, creates categories, configures GitHub Pages, and sets up data synchronization. This approach eliminates the need for external hosting while providing professional-looking community support portals.
+Early on I played around with a few different ideas, from building a full-on GitHub Marketplace app to just handing people repo templates they could configure on their own. Eventually I landed on a middle ground: a repo template powered by GitHub Actions which is a nice balance
 
 ## Design Decisions and Trade-offs
 
-We prioritized zero infrastructure costs and user ownership over more advanced features that would require ongoing server maintenance. This constraint influenced several key decisions: using static JSON files for data storage rather than databases, implementing client-side search instead of server-side indexing, and relying on GitHub's built-in authentication rather than custom user management.
+One of the core principles was keeping costs at zero and ownership in the hands of users. That meant staying away from things like databases or servers. Instead, data is stored in static JSON files, search runs client-side, and authentication leans on GitHub’s systems. By going the template route, every project owns its own setup instead of relying on a central service. It does mean updates are manual.
 
-The template repository approach means users maintain their own installations rather than depending on centralized services. This provides autonomy and customization flexibility but also means updates require manual integration. We included automation to help with data synchronization and configuration management.
+## Best Fit
 
-## Value Proposition
+The automation makes setup easier, the interface is more approachable, and communities can present themselves in a way that feels professional and accessible. For projects that care about community building, it’s a solid option.
 
-Doorway addresses the gap between GitHub's powerful but developer-centric tools and the needs of diverse open source communities. It provides professional presentation of community support resources without requiring budget allocation or technical infrastructure management.
+It’s not the right tool if you need heavy-duty ticketing systems, integrations, or automation. Think of it more as a complement to GitHub.
 
-The automation saves time during initial setup and ongoing maintenance, while the improved interface can help projects build more inclusive and accessible communities. For projects that prioritize community building and want to present a polished support experience, Doorway offers genuine utility.
+## The Hard Parts
 
-## Target Use Cases
+Of course, there are trade-offs. At the end of the day, Doorway is mostly a prettier, read-only window into GitHub Discussions. If you actually want to reply or participate, you still have to hop over to GitHub, which isn’t the smoothest experience.
 
-Doorway works best for established open source projects that have active GitHub Discussions but want to provide a more welcoming interface for their broader community. It's particularly valuable for projects where community members may be less familiar with GitHub's interface or where maintainers want to present a more branded, professional support experience.
+The automation also doesn’t save that much time — maybe ten minutes of setup — and users do take on some maintenance when they fork the template. Unlike updating a library through a package manager, keeping your Doorway instance current is more hands-on.
 
-The solution is less suitable for projects that need advanced workflow automation, complex ticketing features, or integration with external systems. It complements rather than replaces GitHub's native tools.
+The “split experience” can also be a little awkward. People browse discussions on the Doorway site, then switch over to GitHub to engage. And since the data is static, it can fall behind until the sync workflow runs again.
 
-## Challenges and Pitfalls
+Finally, while the automation helps, setup still requires some GitHub know-how — forking repos, running workflows, deploying Pages. It’s not rocket science, but it’s also not a one-click install.
 
-Several fundamental challenges became apparent during development. The core issue is that Doorway essentially duplicates functionality that GitHub already provides through Discussions, creating a read-only interface for data that users can access more directly and interact with more effectively on GitHub itself. The time savings from automation amount to perhaps 10 minutes of one-time setup work, while users take on ongoing maintenance responsibilities for their forked installations.
-
-The template repository approach creates a maintenance burden for users who must keep their installations updated with bug fixes and improvements from the upstream template. Unlike traditional software libraries where updates are managed through package managers, template forks require manual intervention to stay current.
-
-The split user experience presents another challenge - users browse discussions through the help desk interface but must navigate to GitHub to actually participate in conversations. This context switching can create confusion about where to find specific discussions or how to follow ongoing conversations.
-
-The static data approach, while avoiding server costs, means discussion data can become stale between synchronization runs. Users may see outdated information until they manually trigger the sync workflow, potentially missing recent answers or new discussions.
-
-Setup complexity remains higher than initially envisioned. While the GitHub Actions automation helps, users still need to understand repository forking, workflow execution, and GitHub Pages deployment. Projects with less technical resources may find the initial configuration challenging.
+Im still in the process of seeing how this can be expanded upon because I believe that the idea is great and is achievable within a minimal cost environment. 
