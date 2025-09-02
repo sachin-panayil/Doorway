@@ -1,43 +1,56 @@
-name: Update Data 
+name: Update Data
+
 on:
+  workflow_dispatch: # Allow manual triggering
   schedule:
-    - cron: "0 * * * *" 
-  workflow_dispatch:
+    - cron: '0 */6 * * *' # Run every 6 hours
 
 jobs:
-  setup:
+  update-data:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pages: write
-      discussions: write
+      contents: write 
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          fetch-depth: 0 
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-            node-version: 18
+          node-version: '18'
 
-      - name: Run update script
-        run: node docs/api/main.js
+      - name: Configure git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Sync with remote and update data
+        run: |
+          # Remove any existing data files that might conflict
+          rm -f docs/data/analytics.json docs/data/discussions.json
+          
+          # Pull latest changes from remote
+          git pull origin ${{ github.ref_name }}
+          
+          # Ensure data directory exists
+          mkdir -p docs/data
+          
+          # Generate fresh data files
+          node docs/api/discussions.js
+          node docs/api/analytics.js
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Pull latest changes
-        run: |
-          git pull --rebase origin ${{ github.ref_name }}
-        continue-on-error: true
-
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update data"
-          commit_user_name: github-actions[bot]
-          commit_user_email: github-actions[bot]@users.noreply.github.com
-          branch: ${{ github.ref_name }}
+          commit_message: 'Update discussions and analytics data'
+          file_pattern: 'docs/data/*.json'
+          commit_user_name: 'github-actions[bot]'
+          commit_user_email: 'github-actions[bot]@users.noreply.github.com'
