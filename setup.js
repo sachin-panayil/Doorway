@@ -6,7 +6,7 @@ const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;
 
 if (!GITHUB_TOKEN || !REPO_OWNER || !REPO_NAME) {
-  console.error('❌ Missing required environment variables: GITHUB_TOKEN, GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY');
+  console.error('❌ Missing required environment variables: GITHUB_TOKEN, REPO_OWNER, REPO_NAME');
   process.exit(1);
 }
 
@@ -31,6 +31,29 @@ async function makeGitHubRequest(endpoint, method = 'GET', body = null) {
   }
 
   return response.json();
+}
+
+async function makeGraphQLRequest(query, variables = {}) {
+  const response = await fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${GITHUB_TOKEN}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ query, variables })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GraphQL API error (${response.status}): ${errorText}`);
+  }
+
+  const data = await response.json();
+  if (data.errors) {
+    throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
+  }
+
+  return data.data;
 }
 
 async function detectOwnerType() {
@@ -65,6 +88,11 @@ async function enableDiscussions() {
       has_discussions: true
     });
     console.log('✅ GitHub Discussions enabled');
+    
+    // Wait a bit for GitHub to process the change
+    console.log('⏳ Waiting for GitHub Discussions to be fully activated...');
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
   } catch (error) {
     if (error.message.includes('403')) {
       console.log('⚠️  Discussions may already be enabled or insufficient permissions');
@@ -90,40 +118,8 @@ async function enableGitHubPages() {
       console.log('⚠️  GitHub Pages already configured');
     } else {
       console.log('⚠️  Could not enable GitHub Pages:', error.message);
+      console.log('💡 You may need to enable it manually in repository Settings → Pages');
     }
-  }
-}
-
-async function createDiscussionCategories() {
-  console.log('📂 Setting up discussion categories...');
-  
-  // Get existing categories first
-  try {
-    const categories = await makeGitHubRequest(`/repos/${REPO_OWNER}/${REPO_NAME}/discussions/categories`);
-    const existingCategories = categories.map(cat => cat.name);
-    
-    const defaultCategories = [
-      { name: 'Q&A', emoji: '❓', description: 'Ask the community for help' },
-      { name: 'General', emoji: '💬', description: 'Chat about anything and everything here' },
-      { name: 'Ideas', emoji: '💡', description: 'Share ideas for new features' },
-      { name: 'Show and tell', emoji: '🙌', description: 'Show off something you\'ve made' },
-      { name: 'Announcements', emoji: '📢', description: 'Updates from maintainers' }
-    ];
-
-    for (const category of defaultCategories) {
-      if (!existingCategories.includes(category.name)) {
-        try {
-          await makeGitHubRequest(`/repos/${REPO_OWNER}/${REPO_NAME}/discussions/categories`, 'POST', category);
-          console.log(`✅ Created category: ${category.name}`);
-        } catch (error) {
-          console.log(`⚠️  Could not create category ${category.name}:`, error.message);
-        }
-      } else {
-        console.log(`⚠️  Category already exists: ${category.name}`);
-      }
-    }
-  } catch (error) {
-    console.log('⚠️  Could not manage discussion categories:', error.message);
   }
 }
 
@@ -223,26 +219,13 @@ async function fetchDiscussionsData() {
   `;
 
   try {
-    const response = await fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GITHUB_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query,
-        variables: { owner: REPO_OWNER, repo: REPO_NAME }
-      })
+    const data = await makeGraphQLRequest(query, { 
+      owner: REPO_OWNER, 
+      repo: REPO_NAME 
     });
 
-    const data = await response.json();
-    
-    if (data.errors) {
-      throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
-    }
-
     // Process discussions data
-    const discussions = data.data.repository.discussions.nodes.map(discussion => ({
+    const discussions = data.repository.discussions.nodes.map(discussion => ({
       id: discussion.id,
       number: discussion.number,
       title: discussion.title,
@@ -267,9 +250,9 @@ async function fetchDiscussionsData() {
 
     const processedData = {
       lastUpdated: new Date().toISOString(),
-      totalCount: data.data.repository.discussions.totalCount,
+      totalCount: data.repository.discussions.totalCount,
       discussions: discussions,
-      categories: data.data.repository.discussionCategories.nodes,
+      categories: data.repository.discussionCategories.nodes,
       categoryCounts: categoryCounts,
       ownerType: ownerType, // Add owner type to data
       ownerInfo: {
@@ -279,7 +262,10 @@ async function fetchDiscussionsData() {
       }
     };
 
+    // Ensure data directory exists
+    await fs.mkdir(path.join(process.cwd(), 'docs', 'data'), { recursive: true });
     await fs.writeFile(path.join(process.cwd(), 'docs', 'data', 'discussions.json'), JSON.stringify(processedData, null, 2));
+    
     console.log(`✅ Updated discussions.json with ${discussions.length} discussions`);
 
   } catch (error) {
@@ -340,15 +326,52 @@ async function createWelcomeDiscussion() {
   console.log('👋 Creating welcome discussion...');
   
   try {
-    // First, get the General category ID
-    const categories = await makeGitHubRequest(`/repos/${REPO_OWNER}/${REPO_NAME}/discussions/categories`);
-    const generalCategory = categories.find(cat => cat.name === 'General' || cat.name === 'Announcements');
+    // First, get discussion categories using GraphQL
+    const categoriesQuery = `
+      query GetCategories($owner: String!, $repo: String!) {
+        repository(owner: $owner, name: $repo) {
+          discussionCategories(first: 10) {
+            nodes {
+              id
+              name
+              emoji
+              description
+            }
+          }
+        }
+      }
+    `;
     
-    if (!generalCategory) {
-      console.log('⚠️  No suitable category found for welcome discussion');
+    const categoriesData = await makeGraphQLRequest(categoriesQuery, {
+      owner: REPO_OWNER,
+      repo: REPO_NAME
+    });
+    
+    const categories = categoriesData.repository.discussionCategories.nodes;
+    console.log(`📂 Found ${categories.length} discussion categories`);
+    
+    // Find a suitable category (prefer Announcements, General, or the first available)
+    const preferredCategories = ['Announcements', 'General', 'Announcement'];
+    let selectedCategory = categories.find(cat => 
+      preferredCategories.some(preferred => 
+        cat.name.toLowerCase().includes(preferred.toLowerCase())
+      )
+    );
+    
+    // If no preferred category found, use the first available
+    if (!selectedCategory && categories.length > 0) {
+      selectedCategory = categories[0];
+    }
+    
+    if (!selectedCategory) {
+      console.log('⚠️  No discussion categories found. Please create categories manually in your repository settings.');
+      console.log('💡 Go to your repository → Settings → scroll to "Features" → Discussions → "Set up discussions"');
       return;
     }
+    
+    console.log(`📂 Using category: "${selectedCategory.name}" (${selectedCategory.emoji || '💬'})`);
 
+    // Create the welcome discussion using GraphQL
     const accountTypeText = ownerType === 'Organization' ? 'organization' : 'project';
     const welcomeBody = `# Welcome to our Support Portal! 🎉
 
@@ -374,40 +397,86 @@ ${ownerType === 'Organization' ?
 ---
 *This portal was automatically configured using Doorway - a zero-cost help desk solution powered by GitHub Discussions.*`;
 
-    await makeGitHubRequest(`/repos/${REPO_OWNER}/${REPO_NAME}/discussions`, 'POST', {
-      title: `Welcome to our Support Portal!`,
-      body: welcomeBody,
-      category_id: generalCategory.node_id
+    const createDiscussionMutation = `
+      mutation CreateDiscussion($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+        createDiscussion(input: {
+          repositoryId: $repositoryId
+          categoryId: $categoryId
+          title: $title
+          body: $body
+        }) {
+          discussion {
+            id
+            number
+            title
+            url
+          }
+        }
+      }
+    `;
+
+    // Get repository ID for the mutation
+    const repoQuery = `
+      query GetRepository($owner: String!, $repo: String!) {
+        repository(owner: $owner, name: $repo) {
+          id
+        }
+      }
+    `;
+    
+    const repoData = await makeGraphQLRequest(repoQuery, {
+      owner: REPO_OWNER,
+      repo: REPO_NAME
+    });
+
+    const result = await makeGraphQLRequest(createDiscussionMutation, {
+      repositoryId: repoData.repository.id,
+      categoryId: selectedCategory.id,
+      title: 'Welcome to our Support Portal!',
+      body: welcomeBody
     });
     
     console.log('✅ Created welcome discussion with account-specific content');
+    console.log(`🔗 Discussion #${result.createDiscussion.discussion.number}: ${result.createDiscussion.discussion.url}`);
+    
   } catch (error) {
-    if (error.message.includes('422')) {
-      console.log('⚠️  Welcome discussion may already exist');
+    if (error.message.includes('already exists') || error.message.includes('422')) {
+      console.log('⚠️  Welcome discussion may already exist or there was a validation error');
     } else {
       console.log('⚠️  Could not create welcome discussion:', error.message);
+      console.log('💡 You can create a welcome discussion manually in your repository');
     }
   }
 }
 
 async function main() {
-  console.log("\n Starting Doorway Help Desk Setup!");
+  console.log('🚀 Starting Doorway Help Desk Setup!');
+  console.log('');
 
   try {
     await detectOwnerType();
+    console.log('');
     
     await enableDiscussions();
-    await enableGitHubPages();
-    await createDiscussionCategories();
-    await updateConfigFile();
-    await createInitialAnalyticsData();
-    await fetchDiscussionsData();
-    await createWelcomeDiscussion();
+    console.log('');
     
-    console.log('\n Setup completed successfully!');
+    await enableGitHubPages();
+    console.log('');
+    
+    await updateConfigFile();
+    console.log('');
+    
+    await createInitialAnalyticsData();
+    console.log('');
+    
+    await fetchDiscussionsData();
+    console.log('');
+    
+    await createWelcomeDiscussion();
+    console.log('');
     
   } catch (error) {
-    console.error('\n❌ Setup failed:', error.message);
+    console.error('❌ Setup failed:', error.message);
     process.exit(1);
   }
 }
