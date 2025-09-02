@@ -1,0 +1,80 @@
+{
+  "lastUpdated": "2025-09-02T20:01:06.044Z",
+  "totalCount": 2,
+  "discussions": [
+    {
+      "id": "D_kwDOPVq3Qs4AhbYA",
+      "number": 2,
+      "title": "tesdt",
+      "body": "asdasdas...",
+      "category": "Announcements",
+      "categoryEmoji": ":mega:",
+      "author": "sachin-panayil",
+      "authorAvatar": "https://avatars.githubusercontent.com/u/79382140?u=866a17a54fa60f9f00a52a66d86780260184ee84&v=4",
+      "createdAt": "2025-08-19T18:51:49Z",
+      "updatedAt": "2025-08-19T18:51:49Z",
+      "upvotes": 0,
+      "isAnswered": null,
+      "commentCount": 0,
+      "labels": []
+    },
+    {
+      "id": "D_kwDOPVq3Qs4AhBv_",
+      "number": 1,
+      "title": "Test this",
+      "body": "wtf is going on all...",
+      "category": "General",
+      "categoryEmoji": ":speech_balloon:",
+      "author": "sachin-panayil",
+      "authorAvatar": "https://avatars.githubusercontent.com/u/79382140?u=866a17a54fa60f9f00a52a66d86780260184ee84&v=4",
+      "createdAt": "2025-07-31T00:10:21Z",
+      "updatedAt": "2025-07-31T00:10:21Z",
+      "upvotes": 1,
+      "isAnswered": null,
+      "commentCount": 0,
+      "labels": []
+    }
+  ],
+  "categories": [
+    {
+      "id": "DIC_kwDOPVq3Qs4Ctms4",
+      "name": "Announcements",
+      "emoji": ":mega:",
+      "description": "Updates from maintainers"
+    },
+    {
+      "id": "DIC_kwDOPVq3Qs4Ctms5",
+      "name": "General",
+      "emoji": ":speech_balloon:",
+      "description": "Chat about anything and everything here"
+    },
+    {
+      "id": "DIC_kwDOPVq3Qs4Ctms7",
+      "name": "Ideas",
+      "emoji": ":bulb:",
+      "description": "Share ideas for new features"
+    },
+    {
+      "id": "DIC_kwDOPVq3Qs4Ctms9",
+      "name": "Polls",
+      "emoji": ":ballot_box:",
+      "description": "Take a vote from the community"
+    },
+    {
+      "id": "DIC_kwDOPVq3Qs4Ctms6",
+      "name": "Q&A",
+      "emoji": ":pray:",
+      "description": "Ask the community for help"
+    },
+    {
+      "id": "DIC_kwDOPVq3Qs4Ctms8",
+      "name": "Show and tell",
+      "emoji": ":raised_hands:",
+      "description": "Show off something you've made"
+    }
+  ],
+  "categoryCounts": {
+    "Announcements": 1,
+    "General": 1
+  }
+}

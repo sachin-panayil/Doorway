@@ -1,0 +1,178 @@
+{
+  "lastUpdated": "2025-09-02T20:01:06.960Z",
+  "ownerType": "User",
+  "ownerInfo": {
+    "type": "User",
+    "name": "Sachin Panayil",
+    "login": "sachin-panayil",
+    "isPersonal": true
+  },
+  "metrics": {
+    "totalDiscussions": 2,
+    "avgResponseTime": "0h",
+    "resolutionRate": "0%",
+    "satisfactionScore": 4.2,
+    "activeContributors": 0
+  },
+  "trends": {
+    "discussions": {
+      "current": 2,
+      "trend": "+",
+      "change": 1
+    },
+    "responseTime": {
+      "current": 0,
+      "trend": "",
+      "change": 0
+    },
+    "resolution": {
+      "current": 0,
+      "trend": "",
+      "change": 0
+    }
+  },
+  "charts": {
+    "discussionVolume": [
+      {
+        "week": "2025-07-15",
+        "count": 0
+      },
+      {
+        "week": "2025-07-22",
+        "count": 0
+      },
+      {
+        "week": "2025-07-29",
+        "count": 1
+      },
+      {
+        "week": "2025-08-05",
+        "count": 0
+      },
+      {
+        "week": "2025-08-12",
+        "count": 1
+      },
+      {
+        "week": "2025-08-19",
+        "count": 0
+      },
+      {
+        "week": "2025-08-26",
+        "count": 0
+      },
+      {
+        "week": "2025-09-02",
+        "count": 0
+      }
+    ],
+    "categories": [
+      {
+        "category": "Announcements",
+        "count": 1
+      },
+      {
+        "category": "General",
+        "count": 1
+      }
+    ],
+    "resolutionStatus": {
+      "answered": 0,
+      "unanswered": 2
+    }
+  },
+  "owner": {
+    "type": "User",
+    "name": "Sachin Panayil",
+    "login": "sachin-panayil",
+    "totalRepositories": 36,
+    "createdAt": "2021-02-20T21:39:48Z",
+    "topRepositories": [
+      {
+        "name": "living-hhs-open-data-plan",
+        "stars": 7,
+        "forks": 2,
+        "lastUpdate": "2025-07-31T14:54:33Z"
+      },
+      {
+        "name": "gov-codejson",
+        "stars": 5,
+        "forks": 2,
+        "lastUpdate": "2025-08-27T19:09:49Z"
+      },
+      {
+        "name": "automated-codejson-generator",
+        "stars": 2,
+        "forks": 2,
+        "lastUpdate": "2025-08-19T21:39:44Z"
+      },
+      {
+        "name": "repodive-tools",
+        "stars": 2,
+        "forks": 0,
+        "lastUpdate": "2025-04-18T17:19:56Z"
+      },
+      {
+        "name": "codejson-generator",
+        "stars": 1,
+        "forks": 7,
+        "lastUpdate": "2025-08-27T21:21:25Z"
+      },
+      {
+        "name": "codejson-index-generator",
+        "stars": 1,
+        "forks": 3,
+        "lastUpdate": "2025-08-25T18:31:41Z"
+      },
+      {
+        "name": "barwave-ios",
+        "stars": 1,
+        "forks": 0,
+        "lastUpdate": "2025-08-28T00:54:20Z"
+      },
+      {
+        "name": "SkyScan",
+        "stars": 1,
+        "forks": 0,
+        "lastUpdate": "2022-12-19T21:40:18Z"
+      },
+      {
+        "name": "datajson-index-generator",
+        "stars": 1,
+        "forks": 0,
+        "lastUpdate": "2025-06-25T15:21:29Z"
+      },
+      {
+        "name": "code-anti-data-call",
+        "stars": 1,
+        "forks": 3,
+        "lastUpdate": "2025-06-11T16:15:36Z"
+      }
+    ]
+  },
+  "contributors": [
+    {
+      "login": "sachin-panayil",
+      "contributions": 22,
+      "avatar": "https://avatars.githubusercontent.com/u/79382140?v=4"
+    }
+  ],
+  "mostActiveDiscussions": [
+    {
+      "title": "Test this",
+      "number": 1,
+      "author": "sachin-panayil",
+      "upvotes": 1,
+      "comments": 0,
+      "category": "General"
+    },
+    {
+      "title": "tesdt",
+      "number": 2,
+      "author": "sachin-panayil",
+      "upvotes": 0,
+      "comments": 0,
+      "category": "Announcements"
+    }
+  ]
+}
