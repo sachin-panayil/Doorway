@@ -253,7 +253,7 @@ function createDiscussion(category) {
     return;
   }
 
-  const url = `https://github.com/${repoPath}/discussions/new?category=${category}`;
+  const url = `https://github.com/${repoPath}/discussions/new?category=${encodeURIComponent(category)}`;
   window.open(url, '_blank');
   hideCategoryModal();
 }
