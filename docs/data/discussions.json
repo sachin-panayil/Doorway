@@ -1,7 +1,23 @@
 {
-  "lastUpdated": "2025-09-02T20:02:04.627Z",
-  "totalCount": 2,
+  "lastUpdated": "2025-09-02T20:02:16.391Z",
+  "totalCount": 3,
   "discussions": [
+    {
+      "id": "D_kwDOPVq3Qs4Ahsde",
+      "number": 3,
+      "title": "Welcome to our Support Portal!",
+      "body": "# Welcome to our Support Portal! 🎉\n\nThis community support portal has been automatically set up for our project to help you get answers to your questions and connect with other users.\n\n## How to get ...",
+      "category": "Announcements",
+      "categoryEmoji": ":mega:",
+      "author": "sachin-panayil",
+      "authorAvatar": "https://avatars.githubusercontent.com/u/79382140?u=866a17a54fa60f9f00a52a66d86780260184ee84&v=4",
+      "createdAt": "2025-09-02T20:02:05Z",
+      "updatedAt": "2025-09-02T20:02:06Z",
+      "upvotes": 1,
+      "isAnswered": null,
+      "commentCount": 0,
+      "labels": []
+    },
     {
       "id": "D_kwDOPVq3Qs4AhbYA",
       "number": 2,
@@ -74,13 +90,7 @@
     }
   ],
   "categoryCounts": {
-    "Announcements": 1,
+    "Announcements": 2,
     "General": 1
-  },
-  "ownerType": "User",
-  "ownerInfo": {
-    "type": "User",
-    "name": "Sachin Panayil",
-    "login": "sachin-panayil"
   }
 }
