@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-02T20:01:06.044Z",
+  "lastUpdated": "2025-09-02T20:02:04.627Z",
   "totalCount": 2,
   "discussions": [
     {
@@ -76,5 +76,11 @@
   "categoryCounts": {
     "Announcements": 1,
     "General": 1
+  },
+  "ownerType": "User",
+  "ownerInfo": {
+    "type": "User",
+    "name": "Sachin Panayil",
+    "login": "sachin-panayil"
   }
 }
