@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-04T12:23:52.011Z",
+  "lastUpdated": "2025-09-04T18:16:15.054Z",
   "ownerType": "User",
   "ownerInfo": {
     "type": "User",
@@ -98,7 +98,7 @@
         "name": "gov-codejson",
         "stars": 5,
         "forks": 2,
-        "lastUpdate": "2025-09-03T18:11:46Z"
+        "lastUpdate": "2025-09-04T14:45:55Z"
       },
       {
         "name": "automated-codejson-generator",
@@ -116,7 +116,7 @@
         "name": "codejson-generator",
         "stars": 1,
         "forks": 7,
-        "lastUpdate": "2025-08-27T21:21:25Z"
+        "lastUpdate": "2025-09-04T17:56:30Z"
       },
       {
         "name": "codejson-index-generator",
@@ -153,7 +153,7 @@
   "contributors": [
     {
       "login": "sachin-panayil",
-      "contributions": 32,
+      "contributions": 33,
       "avatar": "https://avatars.githubusercontent.com/u/79382140?v=4"
     }
   ],
