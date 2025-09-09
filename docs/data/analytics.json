@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-09T12:25:02.297Z",
+  "lastUpdated": "2025-09-09T18:14:54.589Z",
   "ownerType": "User",
   "ownerInfo": {
     "type": "User",
@@ -116,7 +116,7 @@
         "name": "codejson-generator",
         "stars": 1,
         "forks": 7,
-        "lastUpdate": "2025-09-04T17:56:30Z"
+        "lastUpdate": "2025-09-09T15:45:51Z"
       },
       {
         "name": "codejson-index-generator",
@@ -153,7 +153,7 @@
   "contributors": [
     {
       "login": "sachin-panayil",
-      "contributions": 52,
+      "contributions": 53,
       "avatar": "https://avatars.githubusercontent.com/u/79382140?v=4"
     }
   ],
