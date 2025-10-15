@@ -1,0 +1,65 @@
+{
+  "name": "Doorway",
+  "version": "",
+  "description": "The front doorway for all community support across your GitHub Organization ",
+  "longDescription": "",
+  "status": "",
+  "permissions": {
+    "licenses": [
+      {
+        "name": "",
+        "URL": ""
+      }
+    ],
+    "usageType": [],
+    "exemptionText": ""
+  },
+  "organization": "",
+  "repositoryURL": "https://github.com/sachin-panayil/Doorway",
+  "repositoryHost": "github",
+  "repositoryVisibility": "public",
+  "homepageURL": "",
+  "downloadURL": "",
+  "disclaimerURL": "",
+  "disclaimerText": "",
+  "vcs": "git",
+  "laborHours": 4776,
+  "reuseFrequency": {
+    "forks": 0,
+    "clones": 0
+  },
+  "platforms": [],
+  "categories": [],
+  "softwareType": "",
+  "languages": [
+    "JavaScript"
+  ],
+  "maintenance": "",
+  "contractNumber": [],
+  "SBOM": "https://github.com/sachin-panayil/Doorway/network/dependencies",
+  "relatedCode": [],
+  "reusedCode": [],
+  "partners": [],
+  "date": {
+    "created": "2025-07-30T23:28:02Z",
+    "lastModified": "2025-10-15T17:44:29Z",
+    "metadataLastUpdated": "2025-10-15T17:52:16.965Z"
+  },
+  "tags": [],
+  "contact": {
+    "email": "",
+    "name": ""
+  },
+  "feedbackMechanism": "https://github.com/sachin-panayil/Doorway/issues",
+  "AIUseCaseID": "0",
+  "localisation": false,
+  "repositoryType": "",
+  "userInput": false,
+  "fismaLevel": "",
+  "group": "",
+  "projects": [],
+  "systems": [],
+  "subsetInHealthcare": [],
+  "userType": [],
+  "maturityModelTier": 0
+}
